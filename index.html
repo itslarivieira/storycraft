@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>StoryCraft</title>
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="icon.png">
   <meta name="theme-color" content="#0c0b14">
-
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>StoryCraft - App da Escritora</title>
   <!-- Google Identity Services -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
@@ -33,115 +32,47 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
-      background: #06050a;
+      background: var(--bg-dark);
       color: var(--text-main);
       font-family: var(--font-family);
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      padding: 16px;
-    }
-
-    /* Top Controls */
-    .top-controls {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 16px;
-      align-items: center;
-      flex-wrap: wrap;
-      justify-content: center;
-      z-index: 10;
-    }
-
-    .badge-info {
-      background: rgba(138, 63, 252, 0.15);
-      border: 1px solid var(--purple-main);
-      color: #c7a7ff;
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: 500;
-    }
-
-    .btn-control {
-      background: #1f1d33;
-      color: var(--teal-mint);
-      border: 1px solid var(--teal-mint);
-      padding: 7px 16px;
-      border-radius: 20px;
-      font-size: 13px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.2s;
-    }
-
-    .btn-control:hover {
-      background: var(--teal-mint);
-      color: #0c0b14;
-      box-shadow: 0 0 14px var(--teal-glow);
-    }
-
-    /* Phone Shell */
-    .phone-container {
+      min-height: -webkit-fill-available;
       width: 100%;
-      max-width: 440px;
-      height: 890px;
-      background: var(--bg-dark);
-      border-radius: 46px;
-      border: 8px solid #242238;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 40px rgba(138, 63, 252, 0.2);
       display: flex;
       flex-direction: column;
-      overflow: hidden;
-      position: relative;
-      transition: all 0.3s ease;
-    }
-
-    .phone-container.fullscreen {
-      max-width: 1050px;
-      height: 94vh;
-      border-radius: 20px;
-      border-width: 2px;
-    }
-
-    /* Status Bar */
-    .status-bar {
-      height: 38px;
-      padding: 0 24px;
-      display: flex;
-      justify-content: space-between;
       align-items: center;
-      font-size: 12px;
-      color: var(--text-dim);
-      font-weight: 600;
+      overflow-x: hidden;
+    }
+
+    /* Real Native App Container: Fullscreen on mobile, cleanly centered on desktop */
+    .app-root {
+      width: 100%;
+      max-width: 600px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
       background: var(--bg-dark);
-      flex-shrink: 0;
-      z-index: 20;
+      padding-bottom: 70px; /* Space for bottom nav */
     }
 
-    .camera-pill {
-      width: 80px;
-      height: 18px;
-      background: #000;
-      border-radius: 20px;
-    }
-
-    /* App Header */
+    /* Native App Header */
     .app-header {
-      padding: 12px 20px;
-      background: linear-gradient(180deg, #181728 0%, rgba(12, 11, 20, 0.9) 100%);
+      position: sticky;
+      top: 0;
+      width: 100%;
+      padding: 14px 18px;
+      background: rgba(24, 23, 38, 0.95);
+      backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--card-border);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-shrink: 0;
-      z-index: 20;
-      transition: all 0.2s;
+      z-index: 50;
     }
 
     .header-book-switch {
@@ -155,7 +86,7 @@
       border: 1px solid var(--card-border);
       color: var(--teal-mint);
       border-radius: 8px;
-      padding: 4px 8px;
+      padding: 6px 10px;
       font-size: 11px;
       cursor: pointer;
       display: flex;
@@ -171,7 +102,7 @@
 
     .book-title {
       font-size: 16px;
-      font-weight: 700;
+      font-weight: 800;
       background: linear-gradient(90deg, #ffffff, #c7a7ff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -186,12 +117,13 @@
       align-items: center;
       gap: 6px;
       font-size: 11px;
-      padding: 4px 10px;
-      border-radius: 12px;
+      padding: 5px 12px;
+      border-radius: 14px;
       background: rgba(0, 242, 195, 0.1);
       border: 1px solid rgba(0, 242, 195, 0.3);
       color: var(--teal-mint);
       cursor: pointer;
+      font-weight: 600;
     }
 
     .drive-dot {
@@ -209,15 +141,13 @@
       100% { opacity: 0.5; transform: scale(0.9); }
     }
 
-    /* Viewport */
-    .screens-viewport {
+    /* Main Content Area */
+    .content-area {
       flex: 1;
-      overflow-y: auto;
+      width: 100%;
+      padding: 16px;
       display: flex;
       flex-direction: column;
-      position: relative;
-      background: var(--bg-dark);
-      padding: 16px;
     }
 
     .screen {
@@ -237,13 +167,13 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* LOGIN SCREEN STYLES */
+    /* LOGIN SCREEN */
     .login-container {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      flex: 1;
+      min-height: 80vh;
       text-align: center;
       padding: 20px 10px;
     }
@@ -260,16 +190,10 @@
       justify-content: center;
       font-size: 42px;
       margin-bottom: 24px;
-      animation: floatLogo 3s ease-in-out infinite;
-    }
-
-    @keyframes floatLogo {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
     }
 
     .login-app-title {
-      font-size: 32px;
+      font-size: 34px;
       font-weight: 900;
       letter-spacing: -0.5px;
       background: linear-gradient(135deg, #ffffff 0%, #d1b8ff 50%, var(--teal-mint) 100%);
@@ -289,8 +213,8 @@
       font-size: 13px;
       color: var(--text-muted);
       line-height: 1.6;
-      max-width: 320px;
-      margin-bottom: 30px;
+      max-width: 330px;
+      margin-bottom: 28px;
     }
 
     .login-benefits-list {
@@ -309,13 +233,11 @@
       gap: 10px;
       background: rgba(24, 23, 38, 0.7);
       border: 1px solid var(--card-border);
-      padding: 10px 14px;
+      padding: 12px 14px;
       border-radius: 14px;
       font-size: 12px;
       color: #edeaf7;
     }
-
-    .benefit-item .icon { font-size: 18px; }
 
     .btn-google-login {
       width: 100%;
@@ -323,7 +245,7 @@
       background: #ffffff;
       color: #1f1f1f;
       border: none;
-      padding: 14px 20px;
+      padding: 15px 20px;
       border-radius: 16px;
       font-size: 15px;
       font-weight: 700;
@@ -333,15 +255,12 @@
       justify-content: center;
       gap: 12px;
       box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 255, 255, 0.15);
-      transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+      transition: all 0.2s;
     }
 
-    .btn-google-login:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 25px rgba(0, 242, 195, 0.3);
+    .btn-google-login:active {
+      transform: scale(0.98);
     }
-
-    .google-icon { width: 22px; height: 22px; }
 
     .login-footer-security {
       display: flex;
@@ -355,7 +274,7 @@
       max-width: 320px;
     }
 
-    /* SCREEN: MEUS LIVROS */
+    /* MEUS LIVROS */
     .books-grid {
       display: flex;
       flex-direction: column;
@@ -370,14 +289,12 @@
       display: flex;
       gap: 14px;
       cursor: pointer;
-      transition: all 0.25s;
+      transition: all 0.2s;
       position: relative;
     }
 
     .book-card:hover {
       border-color: var(--purple-main);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(138, 63, 252, 0.25);
       background: var(--card-hover);
     }
 
@@ -425,15 +342,13 @@
       border: none;
       color: var(--text-dim);
       cursor: pointer;
-      font-size: 14px;
+      font-size: 15px;
       padding: 4px 6px;
       border-radius: 6px;
-      transition: all 0.15s;
     }
 
-    .btn-delete-item:hover {
+    .btn-delete-item:hover, .btn-delete-item:active {
       color: #ff5376;
-      background: rgba(255, 83, 118, 0.15);
     }
 
     .book-card-genre {
@@ -494,42 +409,29 @@
       background: linear-gradient(135deg, var(--purple-main) 0%, #6823d1 100%);
       color: #fff;
       border: none;
-      padding: 8px 14px;
+      padding: 9px 15px;
       border-radius: 12px;
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 6px;
       box-shadow: 0 4px 14px var(--purple-glow);
-      transition: all 0.2s;
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 18px var(--purple-glow);
     }
 
     .btn-secondary {
       background: rgba(0, 242, 195, 0.1);
       border: 1px solid var(--teal-mint);
       color: var(--teal-mint);
-      padding: 8px 14px;
+      padding: 9px 15px;
       border-radius: 12px;
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 6px;
-      transition: all 0.2s;
-    }
-
-    .btn-secondary:hover {
-      background: var(--teal-mint);
-      color: #0c0b14;
-      box-shadow: 0 4px 14px var(--teal-glow);
     }
 
     /* Chapter List */
@@ -553,13 +455,7 @@
 
     .chapter-card:hover {
       border-color: var(--purple-main);
-      box-shadow: 0 4px 18px rgba(138, 63, 252, 0.15);
       background: var(--card-hover);
-    }
-
-    .chapter-card.dragging {
-      opacity: 0.4;
-      border-color: var(--pink-neon);
     }
 
     .drag-handle {
@@ -615,22 +511,10 @@
       font-weight: 600;
     }
 
-    .char-badge.pink {
-      background: rgba(255, 83, 118, 0.15);
-      border: 1px solid rgba(255, 83, 118, 0.4);
-      color: #ff8ca3;
-    }
-
     .char-badge.teal {
       background: rgba(0, 242, 195, 0.15);
       border: 1px solid rgba(0, 242, 195, 0.4);
       color: var(--teal-mint);
-    }
-
-    .char-badge.purple {
-      background: rgba(138, 63, 252, 0.15);
-      border: 1px solid rgba(138, 63, 252, 0.4);
-      color: #c7a7ff;
     }
 
     .card-actions {
@@ -643,8 +527,8 @@
       background: transparent;
       border: none;
       color: var(--text-dim);
-      font-size: 12px;
-      padding: 4px;
+      font-size: 13px;
+      padding: 5px;
       cursor: pointer;
       border-radius: 6px;
     }
@@ -656,13 +540,12 @@
 
     .btn-icon-mini.del:hover {
       color: #ff5376;
-      background: rgba(255, 83, 118, 0.15);
     }
 
     /* Characters Grid */
     .char-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
       gap: 12px;
       margin-bottom: 20px;
     }
@@ -683,8 +566,6 @@
 
     .char-card:hover {
       border-color: var(--teal-mint);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px var(--teal-glow);
     }
 
     .btn-char-del {
@@ -694,7 +575,7 @@
       background: transparent;
       border: none;
       color: var(--text-dim);
-      font-size: 13px;
+      font-size: 14px;
       cursor: pointer;
       padding: 4px;
     }
@@ -735,7 +616,6 @@
       align-items: center;
       gap: 20px;
       min-height: 500px;
-      position: relative;
     }
 
     .tree-generation {
@@ -789,7 +669,6 @@
       min-width: 110px;
       text-align: center;
       cursor: pointer;
-      transition: all 0.2s;
     }
 
     .tree-node.highlight-maria { border-color: var(--pink-neon); box-shadow: 0 0 16px var(--pink-glow); }
@@ -829,7 +708,6 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 12px;
-      flex-shrink: 0;
       flex-wrap: wrap;
       gap: 8px;
     }
@@ -864,30 +742,6 @@
       width: 100%;
       outline: none;
       margin-bottom: 12px;
-    }
-
-    .char-selector-chips {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 12px;
-      flex-wrap: wrap;
-    }
-
-    .chip-toggle {
-      font-size: 11px;
-      padding: 4px 10px;
-      border-radius: 12px;
-      background: #1e1d33;
-      border: 1px solid var(--card-border);
-      color: var(--text-dim);
-      cursor: pointer;
-    }
-
-    .chip-toggle.active {
-      border-color: var(--pink-neon);
-      background: rgba(255, 83, 118, 0.2);
-      color: #fff;
     }
 
     .editor-toolbar {
@@ -939,11 +793,11 @@
     /* FULLSCREEN READING MODE OVERLAY */
     .fullscreen-reading-overlay {
       display: none;
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
+      width: 100vw;
+      height: 100vh;
       background: #0d0c17;
       z-index: 1000;
       padding: 30px 24px;
@@ -960,11 +814,14 @@
       margin-bottom: 24px;
       border-bottom: 1px solid var(--card-border);
       padding-bottom: 14px;
+      max-width: 760px;
+      width: 100%;
+      margin: 0 auto 24px auto;
     }
 
     .reading-mode-content {
-      font-size: 18px;
-      line-height: 2;
+      font-size: 19px;
+      line-height: 2.1;
       color: #edeaf7;
       max-width: 760px;
       margin: 0 auto;
@@ -994,19 +851,24 @@
     }
 
     .drive-tree span.folder { color: var(--purple-main); font-weight: bold; }
-    .drive-tree span.file { color: var(--teal-mint); }
 
-    /* Bottom Nav Bar */
+    /* Real Native Bottom Navigation Bar */
     .nav-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
       height: 64px;
-      background: #141322;
+      background: rgba(20, 19, 34, 0.96);
+      backdrop-filter: blur(12px);
       border-top: 1px solid var(--card-border);
       display: flex;
       justify-content: space-around;
       align-items: center;
       padding: 0 10px;
-      flex-shrink: 0;
-      z-index: 20;
+      z-index: 50;
+      max-width: 600px;
+      margin: 0 auto;
     }
 
     .nav-item {
@@ -1018,7 +880,6 @@
       font-size: 10px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s;
     }
 
     .nav-item .icon { font-size: 18px; }
@@ -1027,8 +888,8 @@
 
     /* Toast */
     .toast {
-      position: absolute;
-      top: 50px;
+      position: fixed;
+      top: 20px;
       left: 50%;
       transform: translateX(-50%) translateY(-20px);
       background: rgba(24, 23, 38, 0.96);
@@ -1056,22 +917,16 @@
 </head>
 <body>
 
-  <!-- Clean Top Controls -->
-  <div class="top-controls">
-    <div class="badge-info">✨ StoryCraft</div>
-    <button class="btn-control" onclick="togglePhoneFrame()">📱 Alternar Tela Cheia / Celular</button>
+  <!-- Toast Notification -->
+  <div class="toast" id="toast">
+    <span>☁️</span>
+    <span id="toastMsg">Notificação</span>
   </div>
 
-  <!-- Mobile Device Simulation Frame -->
-  <div class="phone-container" id="phoneContainer">
-    <!-- Status Bar -->
-    <div class="status-bar">
-      <span>22:55</span>
-      <div class="camera-pill"></div>
-      <span>100% ⚡</span>
-    </div>
+  <!-- Real Native Full-Width App Root -->
+  <div class="app-root">
 
-    <!-- App Header (Only in active app) -->
+    <!-- Native Header -->
     <div class="app-header" id="appHeader" style="display: none;">
       <div class="header-book-switch">
         <button class="btn-back-shelf" onclick="goToScreen('books')" title="Voltar para a Estante">
@@ -1089,14 +944,8 @@
       </div>
     </div>
 
-    <!-- Toast Notification -->
-    <div class="toast" id="toast">
-      <span>☁️</span>
-      <span id="toastMsg">Notificação</span>
-    </div>
-
-    <!-- Main Screens Viewport -->
-    <div class="screens-viewport">
+    <!-- Main Content Area -->
+    <div class="content-area">
 
       <!-- SCREEN 0: LOGIN COM GOOGLE -->
       <div class="screen active" id="screen-login">
@@ -1134,18 +983,18 @@
 
           <!-- BOTÃO OFICIAL DO GOOGLE -->
           <button class="btn-google-login" onclick="triggerGoogleSignIn()">
-            <svg class="google-icon" viewBox="0 0 24 24">
+            <svg style="width: 22px; height: 22px;" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
               <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
               <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
               <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
             </svg>
-            <span id="googleBtnLabel">Fazer login com o Google</span>
+            <span>Fazer login com o Google</span>
           </button>
 
           <div class="login-footer-security">
             <span>🔒</span>
-            <span>Usa sua conta Google para criar suas pastas no Drive com segurança.</span>
+            <span>Usa sua conta Google para salvar seus livros no seu próprio Drive.</span>
           </div>
         </div>
       </div>
@@ -1342,7 +1191,7 @@
 
     </div>
 
-    <!-- Bottom Navigation Bar -->
+    <!-- Real Native Bottom Navigation Bar -->
     <div class="nav-bar" id="appNavBar" style="display: none;">
       <div class="nav-item active" id="nav-books" onclick="goToScreen('books')">
         <span class="icon">📚</span>
@@ -1365,18 +1214,16 @@
         <span>Drive</span>
       </div>
     </div>
+
   </div>
 
   <script>
     const GOOGLE_CLIENT_ID = "898677339397-r2k3kor920brmo2enas8r4n8ovr74fo6.apps.googleusercontent.com";
     let googleTokenClient = null;
     let googleAccessToken = null;
-    let currentUser = null;
 
-    // PERSISTENCE KEY
     const STORAGE_KEY = "STORYCRAFT_DATA_V1";
 
-    // DEFAULT DATA (Loaded only if user has never saved anything)
     const DEFAULT_DATA = {
       books: [
         {
@@ -1390,39 +1237,23 @@
               content: "A noite caía rapidamente sobre as ruínas da antiga torre de vigia, como se um manto escuro fosse estendido sobre as colinas do norte.\n\nMaria apertou o medalhão herdado de Antônia e deu mais um passo em direção ao grande salão de pedra. O vento trazia o som distante dos cavalos do clã de Jorge. Não havia como voltar atrás agora. As palavras que Pedro havia dito antes da partida ainda ecoavam com força:\n\n— Se cruzarmos este vale antes do amanhecer, nosso filho Antônio terá a paz que José tanto buscou em suas guerras.\n\nEla respirou fundo, puxou a adaga de bronze e fitou a escuridão. O destino dos dois clãs estava selado naquela decisão.",
               words: 110,
               chars: ["Maria", "Pedro"]
-            },
-            {
-              id: 2,
-              title: "O Encontro nas Ruínas",
-              content: "O silêncio do vale foi quebrado apenas pelos passos cautelosos entre os escombros.",
-              words: 12,
-              chars: ["Maria", "José"]
             }
           ],
           characters: [
             { id: 1, name: "Maria", role: "Protagonista", info: "Filha de José & Antônia, Casada com Pedro", color: "pink", icon: "👑" },
             { id: 2, name: "Pedro", role: "Nobre Guerreiro", info: "Filho de Jorge & Helena, Casado com Maria", color: "teal", icon: "⚔️" },
-            { id: 3, name: "Antônio", role: "Herdeiro", info: "Filho de Maria & Pedro", color: "purple", icon: "✨" },
-            { id: 4, name: "José", role: "Patriarca", info: "Casado com Antônia, Pai de Maria", color: "gold", icon: "📜" },
-            { id: 5, name: "Antônia", role: "Matriarca", info: "Casada com José, Mãe de Maria", color: "gold", icon: "🌿" },
-            { id: 6, name: "Jorge", role: "Lorde do Norte", info: "Casado com Helena, Pai de Pedro", color: "teal", icon: "🛡️" },
-            { id: 7, name: "Helena", role: "Conselheira", info: "Casada com Jorge, Mãe de Pedro", color: "pink", icon: "🔮" }
+            { id: 3, name: "Antônio", role: "Herdeiro", info: "Filho de Maria & Pedro", color: "purple", icon: "✨" }
           ]
         }
       ]
     };
 
-    // Load data from LocalStorage
     let appData = null;
     function loadSavedData() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
-        if (raw) {
-          appData = JSON.parse(raw);
-        }
-      } catch (e) {
-        console.warn("Erro ao ler dados locais:", e);
-      }
+        if (raw) appData = JSON.parse(raw);
+      } catch (e) {}
       if (!appData || !appData.books || appData.books.length === 0) {
         appData = JSON.parse(JSON.stringify(DEFAULT_DATA));
         saveDataLocally();
@@ -1432,9 +1263,7 @@
     function saveDataLocally() {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
-      } catch (e) {
-        console.warn("Erro ao salvar dados locais:", e);
-      }
+      } catch (e) {}
     }
 
     let currentBookIndex = 0;
@@ -1445,7 +1274,6 @@
       return appData.books[currentBookIndex] || appData.books[0];
     }
 
-    // BOOKS RENDERING & DELETION
     function renderBooksGrid() {
       const grid = document.getElementById("booksGrid");
       if (!grid) return;
@@ -1523,7 +1351,7 @@
       saveDataLocally();
       renderBooksGrid();
       selectBook(appData.books.length - 1);
-      showToast(`Livro "${title}" criado e salvo com sucesso!`);
+      showToast(`Livro "${title}" criado e salvo!`);
     }
 
     function deleteBook(idx) {
@@ -1546,7 +1374,6 @@
       showToast("Livro excluído com sucesso.");
     }
 
-    // CHAPTERS RENDERING, REORDERING & DELETION
     function renderChapters() {
       const b = getActiveBook();
       const container = document.getElementById("chapterList");
@@ -1641,7 +1468,6 @@
       showToast("Capítulo excluído com sucesso.");
     }
 
-    // CHARACTERS RENDERING & DELETION
     function renderCharacters() {
       const b = getActiveBook();
       const grid = document.getElementById("charactersGrid");
@@ -1693,7 +1519,6 @@
       showToast("Personagem excluído.");
     }
 
-    // EDITOR FUNCTIONS & AUTO-PERSISTENCE
     function openChapterInEditor(index) {
       currentChapterIndex = index;
       const b = getActiveBook();
@@ -1756,7 +1581,6 @@
       overlay.classList.toggle("active");
     }
 
-    // SCREEN NAVIGATION
     function goToScreen(screenKey) {
       document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
       document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
@@ -1777,9 +1601,9 @@
         if (header) header.style.display = "flex";
         if (nav) nav.style.display = "flex";
       }
+      window.scrollTo(0, 0);
     }
 
-    // GOOGLE AUTHENTICATION & DRIVE API
     function triggerGoogleSignIn() {
       showToast("Conectando ao Google...");
 
@@ -1804,7 +1628,6 @@
         }
       }
 
-      // Fallback gracioso caso esteja em ambiente sem internet ou file://
       setTimeout(() => {
         enterMainApp("Sua Conta Google", "");
       }, 600);
@@ -1829,7 +1652,6 @@
 
       enterMainApp(name, email, picture);
       showToast(`✓ Conectada com sucesso, ${name}!`);
-      // Start background drive sync
       syncDriveNow();
     }
 
@@ -1855,7 +1677,6 @@
       showToast("Desconectada do Google Drive.");
     }
 
-    // REAL GOOGLE DRIVE FOLDER & FILE SYNC
     async function syncDriveNow() {
       saveCurrentChapterLocal();
       const b = getActiveBook();
@@ -1867,23 +1688,19 @@
 
       showToast("Sincronizando pastas no Google Drive...");
       try {
-        // 1. Find or create root folder 'MeuAppEscrita'
         const rootFolderId = await getOrCreateDriveFolder("MeuAppEscrita", "root");
         if (!rootFolderId) throw new Error("Não foi possível acessar pasta raiz");
 
-        // 2. Find or create subfolder for active book
         const bookFolderSafeName = b.title.replace(/\s+/g, '_');
         const bookFolderId = await getOrCreateDriveFolder(bookFolderSafeName, rootFolderId);
         if (!bookFolderId) throw new Error("Não foi possível criar pasta do livro");
 
-        // 3. Upload or update chapters
         for (let i = 0; i < b.chapters.length; i++) {
           const ch = b.chapters[i];
           const fileName = `cap_${String(i + 1).padStart(2, '0')}_${ch.title.toLowerCase().replace(/[^a-z0-9]/gi, '_')}.md`;
           await uploadDriveFile(fileName, ch.content || "", bookFolderId, "text/markdown");
         }
 
-        // 4. Upload structure and characters
         await uploadDriveFile("estrutura.json", JSON.stringify(b.chapters, null, 2), bookFolderId, "application/json");
         if (b.characters && b.characters.length > 0) {
           await uploadDriveFile("personagens.json", JSON.stringify(b.characters, null, 2), bookFolderId, "application/json");
@@ -1927,7 +1744,6 @@
         const sdata = await searchRes.json();
 
         if (sdata.files && sdata.files.length > 0) {
-          // Update existing
           const fileId = sdata.files[0].id;
           await fetch(`https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media`, {
             method: "PATCH",
@@ -1935,7 +1751,6 @@
             body: contentText
           });
         } else {
-          // Create new multipart
           const boundary = "-------StoryCraft" + Date.now();
           const body =
             `\r\n--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n` +
@@ -1950,9 +1765,7 @@
             body: body
           });
         }
-      } catch (e) {
-        console.warn(e);
-      }
+      } catch (e) {}
     }
 
     function updateDriveTreeDisplay() {
@@ -1974,20 +1787,7 @@
       setTimeout(() => { toast.classList.remove("show"); }, 2500);
     }
 
-    function togglePhoneFrame() {
-      const phone = document.getElementById("phoneContainer");
-      if (phone) phone.classList.toggle("fullscreen");
-    }
-
     // INITIALIZE
-    
-    // Register Service Worker for PWA installation
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js').catch(err => console.log('SW setup:', err));
-      });
-    }
-
     window.addEventListener("load", () => {
       loadSavedData();
       renderBooksGrid();
