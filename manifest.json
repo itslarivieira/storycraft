@@ -1,0 +1,17 @@
+{
+  "name": "StoryCraft",
+  "short_name": "StoryCraft",
+  "description": "O Santuário da sua Escrita - Editor e Organizador de Livros",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0c0b14",
+  "theme_color": "#0c0b14",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
